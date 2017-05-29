@@ -1,6 +1,6 @@
 package spatial;
 
-import ShapeFileParse.ShapeParseUtil;
+import ShapeFileParse.ShpParseUtil;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -31,7 +31,7 @@ public class ShapeFileReader extends RecordReader<ShapeKey, BytesWritable> {
     }
 
     public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
-        ShapeParseUtil.initializeGeometryFactory();
+        ShpParseUtil.initializeGeometryFactory();
         FileSplit fileSplit = (FileSplit)split;
         long start = fileSplit.getStart();
         long end = start + fileSplit.getLength();
@@ -43,15 +43,15 @@ public class ShapeFileReader extends RecordReader<ShapeKey, BytesWritable> {
         inputStream = new DataInputStream(inputStreamFS);
         //IOUtils.readFully(inputStream, wholeStream, 0, len);
         //inputStream = new DataInputStream(new ByteArrayInputStream(wholeStream));
-        ShapeParseUtil.parseShapeFileHead(inputStream);
+        ShpParseUtil.parseShapeFileHead(inputStream);
     }
 
     public boolean nextKeyValue() throws IOException, InterruptedException {
-        if(ShapeParseUtil.remainLength <= 0) return false;
+        if(ShpParseUtil.remainLength <= 0) return false;
         recordKey = new ShapeKey();
         recordContent = new BytesWritable();
-        recordKey.setIndex(ShapeParseUtil.parseRecordHeadID(inputStream));
-        byte[] primitiveContent = ShapeParseUtil.parseRecordPrimitiveContent(inputStream);
+        recordKey.setIndex(ShpParseUtil.parseRecordHeadID(inputStream));
+        byte[] primitiveContent = ShpParseUtil.parseRecordPrimitiveContent(inputStream);
         recordContent.set(primitiveContent, 0, primitiveContent.length);
         return true;
     }
@@ -65,7 +65,7 @@ public class ShapeFileReader extends RecordReader<ShapeKey, BytesWritable> {
     }
 
     public float getProgress() throws IOException, InterruptedException {
-        return (float)(ShapeParseUtil.fileLength - ShapeParseUtil.remainLength) / (float)ShapeParseUtil.fileLength;
+        return (float)(ShpParseUtil.fileLength - ShpParseUtil.remainLength) / (float) ShpParseUtil.fileLength;
     }
 
     public void close() throws IOException {

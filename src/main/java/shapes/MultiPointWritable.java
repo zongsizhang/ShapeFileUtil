@@ -1,12 +1,11 @@
 package shapes;
 
-import ShapeFileParse.ShapeParseUtil;
+import ShapeFileParse.ShpParseUtil;
 import ShapeFileParse.ShapeTypeNotMatchException;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Point;
 
-import java.awt.*;
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -24,9 +23,9 @@ public class MultiPointWritable extends ShapeWritable {
     }
 
     public void parseShape(DataInputStream inputStream) throws IOException, ShapeTypeNotMatchException {
-        ShapeParseUtil.validateShapeType(inputStream);
-        boundBox = ShapeParseUtil.parseBoundingBox(inputStream);
-        points = ShapeParseUtil.parseMultiPoints(inputStream);
+        ShpParseUtil.validateShapeType(inputStream);
+        boundBox = ShpParseUtil.parseBoundingBox(inputStream);
+        points = ShpParseUtil.parseMultiPoints(inputStream);
     }
 
     public void printShape() {

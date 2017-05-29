@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * Created by zongsizhang on 5/3/17.
  */
-public class ShapeParseUtil implements ShapeFileConst{
+public class ShpParseUtil implements ShapeFileConst{
     public static int currentTokenType = 0;
     public static long fileLength = 0;
     public static long remainLength = 0;

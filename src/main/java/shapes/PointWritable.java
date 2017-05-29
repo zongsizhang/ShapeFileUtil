@@ -1,14 +1,8 @@
 package shapes;
 
-import ShapeFileParse.ShapeFileConst;
-import ShapeFileParse.ShapeParseUtil;
+import ShapeFileParse.ShpParseUtil;
 import ShapeFileParse.ShapeTypeNotMatchException;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
-import org.apache.commons.io.EndianUtils;
-import org.geotools.data.shapefile.shp.ShapeType;
-import shapes.ShapeWritable;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -37,8 +31,8 @@ public class PointWritable extends ShapeWritable {
     public void parseShape(DataInputStream inputStream)
             throws IOException, ShapeTypeNotMatchException
     {
-        ShapeParseUtil.validateShapeType(inputStream);
-        point = ShapeParseUtil.parsePoint(inputStream);
+        ShpParseUtil.validateShapeType(inputStream);
+        point = ShpParseUtil.parsePoint(inputStream);
     }
 
     public void flatmapShape() {

@@ -1,6 +1,6 @@
 package shapes;
 
-import ShapeFileParse.ShapeParseUtil;
+import ShapeFileParse.ShpParseUtil;
 import ShapeFileParse.ShapeTypeNotMatchException;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Polygon;
@@ -22,8 +22,8 @@ public class PolygonWritable extends ShapeWritable {
     public void parseShape(DataInputStream inputStream)
             throws IOException, ShapeTypeNotMatchException
     {
-        ShapeParseUtil.validateShapeType(inputStream);
-        polygon = ShapeParseUtil.parsePolygon(inputStream);
+        ShpParseUtil.validateShapeType(inputStream);
+        polygon = ShpParseUtil.parsePolygon(inputStream);
     }
 
     public void printShape() {

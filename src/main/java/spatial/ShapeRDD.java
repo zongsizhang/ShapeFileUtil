@@ -15,7 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.Serializable;
 
-import static ShapeFileParse.ShapeParseUtil.currentTokenType;
+import static ShapeFileParse.ShpParseUtil.currentTokenType;
 
 /**
  * Created by zongsizhang on 5/23/17.
