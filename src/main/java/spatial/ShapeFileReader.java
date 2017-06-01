@@ -2,14 +2,18 @@ package spatial;
 
 import ShapeFileParse.ShpParseUtil;
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
+import org.apache.hadoop.mapreduce.lib.input.CombineFileSplit;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -22,36 +26,35 @@ public class ShapeFileReader extends RecordReader<ShapeKey, BytesWritable> {
 
     private BytesWritable recordContent = null;
 
-    private DataInputStream inputStream = null;
+    /** inputstream for .shp file */
+    private FSDataInputStream shpInputStream = null;
 
-    public ShapeFileReader(InputSplit split, TaskAttemptContext context)
-            throws IOException, InterruptedException
-    {
-        initialize(split, context);
-    }
+    /** inputstream for .dbf file */
+    private FSDataInputStream dbfInputStream = null;
+
+    /** inputstream for .shx file */
+    private FSDataInputStream shxInputStream = null;
 
     public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
         ShpParseUtil.initializeGeometryFactory();
         FileSplit fileSplit = (FileSplit)split;
-        long start = fileSplit.getStart();
-        long end = start + fileSplit.getLength();
-        int len = (int)fileSplit.getLength();
+        CombineFileSplit combineFileSplit = (CombineFileSplit)split;
         Path filePath = fileSplit.getPath();
         FileSystem fileSys = filePath.getFileSystem(context.getConfiguration());
-        FSDataInputStream inputStreamFS = fileSys.open(filePath);
+        shpInputStream = fileSys.open(filePath);
         //byte[] wholeStream = new byte[len];
-        inputStream = new DataInputStream(inputStreamFS);
+        //System.out.println(inputStreamFS.available() + "============with=========" + inputStream.available());
         //IOUtils.readFully(inputStream, wholeStream, 0, len);
         //inputStream = new DataInputStream(new ByteArrayInputStream(wholeStream));
-        ShpParseUtil.parseShapeFileHead(inputStream);
+        ShpParseUtil.parseShapeFileHead(shpInputStream);
     }
 
     public boolean nextKeyValue() throws IOException, InterruptedException {
         if(ShpParseUtil.remainLength <= 0) return false;
         recordKey = new ShapeKey();
         recordContent = new BytesWritable();
-        recordKey.setIndex(ShpParseUtil.parseRecordHeadID(inputStream));
-        byte[] primitiveContent = ShpParseUtil.parseRecordPrimitiveContent(inputStream);
+        recordKey.setIndex(ShpParseUtil.parseRecordHeadID(shpInputStream));
+        byte[] primitiveContent = ShpParseUtil.parseRecordPrimitiveContent(shpInputStream);
         recordContent.set(primitiveContent, 0, primitiveContent.length);
         return true;
     }

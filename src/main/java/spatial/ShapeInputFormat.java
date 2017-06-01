@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class ShapeInputFormat extends FileInputFormat<ShapeKey, BytesWritable> {
     public RecordReader<ShapeKey, BytesWritable> createRecordReader(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
-        return new ShapeFileReader(split, context);
+        return new ShapeFileReader();
     }
 
     @Override

@@ -36,10 +36,9 @@ public class ShapeRDD implements Serializable{
         );
 
         System.out.println("============shape count================" + shapePrimitiveRdd.count());
-
         JavaRDD<ShapeWritable> shapeRDD = shapePrimitiveRdd.map(PrimitiveToShape);
-        System.out.println("============shapeWritable count================" + shapeRDD.count());
-        shapeRDD.foreach(PrintShape);
+        //System.out.println("============shapeWritable count================" + shapeRDD.count());
+        //shapeRDD.foreach(PrintShape);
 
     }
 
