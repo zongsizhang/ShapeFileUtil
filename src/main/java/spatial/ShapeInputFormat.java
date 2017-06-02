@@ -6,7 +6,8 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.CombineFileInputFormat;
+import shapes.PrimitiveShapeWritable;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,15 +15,14 @@ import java.util.List;
 /**
  * Created by zongsizhang on 5/3/17.
  */
-public class ShapeInputFormat extends FileInputFormat<ShapeKey, BytesWritable> {
-    public RecordReader<ShapeKey, BytesWritable> createRecordReader(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
-        return new ShapeFileReader();
+public class ShapeInputFormat extends CombineFileInputFormat<ShapeKey, PrimitiveShapeWritable> {
+    public RecordReader<ShapeKey, PrimitiveShapeWritable> createRecordReader(InputSplit split, TaskAttemptContext context) throws IOException {
+        return new CombineShapeReader();
     }
 
     @Override
-    protected boolean isSplitable(JobContext context, Path filename) {
+    protected boolean isSplitable(JobContext context, Path file) {
         return false;
     }
-    
 }
 

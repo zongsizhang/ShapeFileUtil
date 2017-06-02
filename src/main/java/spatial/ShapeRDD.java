@@ -9,6 +9,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.VoidFunction;
 import scala.Tuple2;
+import shapes.PrimitiveShapeWritable;
 import shapes.ShapeWritable;
 
 import java.io.ByteArrayInputStream;
@@ -27,11 +28,11 @@ public class ShapeRDD implements Serializable{
     JavaPairRDD<ShapeKey, BytesWritable> primitiveShapeRDD;
 
     public ShapeRDD(String filePath, JavaSparkContext sparkContext){
-        JavaPairRDD<ShapeKey, BytesWritable> shapePrimitiveRdd = sparkContext.newAPIHadoopFile(
+        JavaPairRDD<ShapeKey, PrimitiveShapeWritable> shapePrimitiveRdd = sparkContext.newAPIHadoopFile(
                 filePath,
                 ShapeInputFormat.class,
                 ShapeKey.class,
-                BytesWritable.class,
+                PrimitiveShapeWritable.class,
                 new Configuration()
         );
 
@@ -42,12 +43,12 @@ public class ShapeRDD implements Serializable{
 
     }
 
-    public static final Function<Tuple2<ShapeKey, BytesWritable>, ShapeWritable> PrimitiveToShape
-            = new Function<Tuple2<ShapeKey, BytesWritable>, ShapeWritable>(){
-        public ShapeWritable call(Tuple2<ShapeKey, BytesWritable> primitiveTuple) throws Exception {
+    public static final Function<Tuple2<ShapeKey, PrimitiveShapeWritable>, ShapeWritable> PrimitiveToShape
+            = new Function<Tuple2<ShapeKey, PrimitiveShapeWritable>, ShapeWritable>(){
+        public ShapeWritable call(Tuple2<ShapeKey, PrimitiveShapeWritable> primitiveTuple) throws Exception {
             Class<?> shapeClass = Class.forName(ShapeFileConst.typeClassNamePairs.get(currentTokenType));
             ShapeWritable shape = (ShapeWritable) shapeClass.newInstance();
-            DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(primitiveTuple._2().getBytes()));
+            DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(primitiveTuple._2().getPrimitiveRecord().getBytes()));
             shape.parseShape(inputStream);
             return shape;
         }

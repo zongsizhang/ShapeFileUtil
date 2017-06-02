@@ -38,14 +38,9 @@ public class ShapeFileReader extends RecordReader<ShapeKey, BytesWritable> {
     public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
         ShpParseUtil.initializeGeometryFactory();
         FileSplit fileSplit = (FileSplit)split;
-        CombineFileSplit combineFileSplit = (CombineFileSplit)split;
         Path filePath = fileSplit.getPath();
         FileSystem fileSys = filePath.getFileSystem(context.getConfiguration());
         shpInputStream = fileSys.open(filePath);
-        //byte[] wholeStream = new byte[len];
-        //System.out.println(inputStreamFS.available() + "============with=========" + inputStream.available());
-        //IOUtils.readFully(inputStream, wholeStream, 0, len);
-        //inputStream = new DataInputStream(new ByteArrayInputStream(wholeStream));
         ShpParseUtil.parseShapeFileHead(shpInputStream);
     }
 
