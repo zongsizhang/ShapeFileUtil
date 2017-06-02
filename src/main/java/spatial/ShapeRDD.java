@@ -10,6 +10,7 @@ import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.VoidFunction;
 import scala.Tuple2;
 import shapes.PrimitiveShapeWritable;
+import shapes.ShapeKey;
 import shapes.ShapeWritable;
 
 import java.io.ByteArrayInputStream;

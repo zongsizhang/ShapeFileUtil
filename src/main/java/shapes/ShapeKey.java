@@ -1,4 +1,4 @@
-package spatial;
+package shapes;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Writable;

@@ -3,14 +3,7 @@ package ShapeFileParse;
 import com.vividsolutions.jts.geom.*;
 import org.apache.commons.io.EndianUtils;
 import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.io.BytesWritable;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.VoidFunction;
-import scala.Tuple2;
-import shapes.ShapeWritable;
-import spatial.ShapeKey;
 
-import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
