@@ -12,6 +12,12 @@ import java.io.IOException;
  */
 public class PrimitiveShapeWritable implements Writable{
 
+    /** primitive bytes of one record */
+    private BytesWritable primitiveRecord = null;
+
+    /** primitive bytes from one record */
+    private BytesWritable primitiveAttribute = null;
+
     public BytesWritable getPrimitiveRecord() {
         return primitiveRecord;
     }
@@ -20,15 +26,17 @@ public class PrimitiveShapeWritable implements Writable{
         this.primitiveRecord = primitiveRecord;
     }
 
-    /** primitive bytes of one record */
-    private BytesWritable primitiveRecord = null;
-
-    /** primitive bytes from one record */
-
-
 
     public void write(DataOutput dataOutput) throws IOException {
 
+    }
+
+    public BytesWritable getPrimitiveAttribute() {
+        return primitiveAttribute;
+    }
+
+    public void setPrimitiveAttribute(BytesWritable primitiveAttribute) {
+        this.primitiveAttribute = primitiveAttribute;
     }
 
     public void readFields(DataInput dataInput) throws IOException {

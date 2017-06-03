@@ -18,18 +18,14 @@ import java.io.IOException;
  */
 public class ShapeFileReader extends RecordReader<ShapeKey, BytesWritable> {
 
+    /** record id */
     private ShapeKey recordKey = null;
 
+    /** primitive bytes value */
     private BytesWritable recordContent = null;
 
     /** inputstream for .shp file */
     private FSDataInputStream shpInputStream = null;
-
-    /** inputstream for .dbf file */
-    private FSDataInputStream dbfInputStream = null;
-
-    /** inputstream for .shx file */
-    private FSDataInputStream shxInputStream = null;
 
     public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
         ShpParseUtil.initializeGeometryFactory();
@@ -63,6 +59,6 @@ public class ShapeFileReader extends RecordReader<ShapeKey, BytesWritable> {
     }
 
     public void close() throws IOException {
-
+        shpInputStream.close();
     }
 }

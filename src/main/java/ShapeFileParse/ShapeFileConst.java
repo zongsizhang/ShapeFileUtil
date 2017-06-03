@@ -11,6 +11,9 @@ import java.util.Map;
  */
 public interface ShapeFileConst {
 
+    /**
+     * Consts for .shp file
+     */
     public static final int EXPECT_FILE_CODE = 9994;
     public static final int EXPECT_FILE_VERSION = 1000;
     public static final int HEAD_FILE_LENGTH_16BIT = 50;
@@ -50,4 +53,13 @@ public interface ShapeFileConst {
         }
     };
 
+
+    /**
+     * Consts for .dbf file
+     */
+    public static final byte FIELD_DESCRIPTOR_TERMINATOR = 0x0d;
+    public static final byte FIELD_NAME_LENGTH = 11;
+    public static final byte RECORD_DELETE_FLAG = 0x2A;
+    public static final byte FILE_END_FLAG = 0x1A;
+    public static final byte RECORD_EXIST_FLAG = 0x20;
 }

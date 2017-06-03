@@ -2,7 +2,6 @@ package ShapeFileParse;
 
 import com.vividsolutions.jts.geom.*;
 import org.apache.commons.io.EndianUtils;
-import org.apache.hadoop.fs.FSDataInputStream;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -17,7 +16,7 @@ public class ShpParseUtil implements ShapeFileConst{
 
     public static GeometryFactory geometryFactory = null;
 
-    public static void parseShapeFileHead(FSDataInputStream inputStream)
+    public static void parseShapeFileHead(DataInputStream inputStream)
     throws IOException
     {
         int fileCode = inputStream.readInt();
@@ -39,7 +38,7 @@ public class ShpParseUtil implements ShapeFileConst{
         geometryFactory = new GeometryFactory();
     }
 
-    public static byte[] parseRecordPrimitiveContent(FSDataInputStream inputStream) throws IOException{
+    public static byte[] parseRecordPrimitiveContent(DataInputStream inputStream) throws IOException{
         int contentLength = inputStream.readInt();
         long recordLength = 16 * (contentLength + 4);
         remainLength -= recordLength;
@@ -48,7 +47,7 @@ public class ShpParseUtil implements ShapeFileConst{
         return contentArray;
     }
 
-    public static int parseRecordHeadID(FSDataInputStream inputStream) throws IOException{
+    public static int parseRecordHeadID(DataInputStream inputStream) throws IOException{
         int id = inputStream.readInt();
         return id;
     }
