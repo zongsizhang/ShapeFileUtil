@@ -7,6 +7,7 @@ import com.vividsolutions.jts.geom.Polygon;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by zongsizhang on 5/12/17.
@@ -29,8 +30,9 @@ public class PolygonWritable extends ShapeWritable {
     public void printShape() {
         System.out.println("==============polygon===========");
         Coordinate[] coordinates = polygon.getCoordinates();
-        for(Coordinate coordinate : coordinates){
-            System.out.println(coordinate.x + " " + coordinate.y);
+        for(int i = 5;i < coordinates.length; ++i){
+            System.out.print(coordinates[i].x + " " + coordinates[i].y + ", ");
         }
+        System.out.println();
     }
 }

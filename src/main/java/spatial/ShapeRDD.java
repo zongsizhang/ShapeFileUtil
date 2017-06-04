@@ -40,7 +40,7 @@ public class ShapeRDD implements Serializable{
         System.out.println("============shape count================" + shapePrimitiveRdd.count());
         JavaRDD<ShapeWritable> shapeRDD = shapePrimitiveRdd.map(PrimitiveToShape);
         //System.out.println("============shapeWritable count================" + shapeRDD.count());
-        //shapeRDD.foreach(PrintShape);
+        shapeRDD.foreach(PrintShape);
 
     }
 
@@ -49,16 +49,30 @@ public class ShapeRDD implements Serializable{
         public ShapeWritable call(Tuple2<ShapeKey, PrimitiveShapeWritable> primitiveTuple) throws Exception {
             Class<?> shapeClass = Class.forName(ShapeFileConst.typeClassNamePairs.get(currentTokenType));
             ShapeWritable shape = (ShapeWritable) shapeClass.newInstance();
+            if(primitiveTuple._2().getPrimitiveAttribute() != null){
+                DataInputStream dbfInputStream = new DataInputStream(new ByteArrayInputStream(primitiveTuple._2().getPrimitiveAttribute().getBytes()));
+                shape.parseAttributes(dbfInputStream);
+            }
             DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(primitiveTuple._2().getPrimitiveRecord().getBytes()));
             shape.parseShape(inputStream);
+            shape.setId((int)primitiveTuple._1().getIndex());
             return shape;
         }
     };
 
     public static final VoidFunction<ShapeWritable> PrintShape = new VoidFunction<ShapeWritable>() {
         public void call(ShapeWritable shapeWritable) throws Exception {
+            System.out.print(shapeWritable.getId() + " :  ");
             shapeWritable.printShape();
+            //shapeWritable.printAttribute();
         }
     };
 
+    public JavaRDD<ShapeWritable> getShapeWritableRDD() {
+        return shapeWritableRDD;
+    }
+
+    public void setShapeWritableRDD(JavaRDD<ShapeWritable> shapeWritableRDD) {
+        this.shapeWritableRDD = shapeWritableRDD;
+    }
 }

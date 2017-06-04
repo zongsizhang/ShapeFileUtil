@@ -37,21 +37,27 @@ public class DbfParseUtil implements ShapeFileConst{
 
     }
 
+    public static DbfInfoBundle infoBundle = null;
+
+    public static void renewParser(){
+        infoBundle = null;
+    }
+
     public static DbfInfoBundle parseFileHead(DataInputStream inputStream) throws IOException {
         //create info bundle
-        DbfInfoBundle bundle = new DbfInfoBundle();
+        infoBundle = new DbfInfoBundle();
         // version
         inputStream.readByte();
         // date YYMMDD format
         byte[] date = new byte[3];
         inputStream.readFully(date);
         // number of records in file
-        bundle.numRecord = EndianUtils.swapInteger(inputStream.readInt());
-        System.out.println(bundle.numRecord + "++++++++++++++++++");
+        infoBundle.numRecord = EndianUtils.swapInteger(inputStream.readInt());
+        System.out.println(infoBundle.numRecord + "++++++++++++++++++");
         // number of bytes in header
         int numBytes = EndianUtils.swapShort(inputStream.readShort());
         // number of bytes in file
-        bundle.numBytesRecord =  EndianUtils.swapShort(inputStream.readShort());
+        infoBundle.numBytesRecord =  EndianUtils.swapShort(inputStream.readShort());
         // skip reserved 2 byte
         inputStream.skipBytes(2);
         // skip flag indicating incomplete transaction
@@ -68,7 +74,7 @@ public class DbfParseUtil implements ShapeFileConst{
         inputStream.skipBytes(2);
         // parse n filed descriptors
         byte terminator = inputStream.readByte();
-        bundle.fieldDescriptors = new ArrayList<FieldDescriptor>();
+        infoBundle.fieldDescriptors = new ArrayList<FieldDescriptor>();
         while(terminator != FIELD_DESCRIPTOR_TERMINATOR){
             FieldDescriptor descriptor = new FieldDescriptor();
             //read field name
@@ -89,10 +95,10 @@ public class DbfParseUtil implements ShapeFileConst{
             descriptor.setFieldDecimalCount(inputStream.readByte());
             // skip the next 14 bytes
             inputStream.skipBytes(14);
-            bundle.fieldDescriptors.add(descriptor);
+            infoBundle.fieldDescriptors.add(descriptor);
             terminator = inputStream.readByte();
         }
-        return bundle;
+        return infoBundle;
     }
 
     public static byte[] parsePrimitiveRecord(DataInputStream inputStream, DbfInfoBundle dbfInfo) throws IOException {
@@ -109,6 +115,7 @@ public class DbfParseUtil implements ShapeFileConst{
         dbfInfo.numRecordRead++; //update number of record read
         return primitiveBytes;
     }
+
 
 
 }
